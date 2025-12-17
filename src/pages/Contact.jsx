@@ -40,14 +40,6 @@ export default function Contact() {
 
             <h2>Contactos</h2>
 
-            <div className="d-flex justify-content-end mb-3">
-                <Link to="/add" className="btn btn-primary">
-                Añadir Contacto
-                </Link>
-            </div>
-
-
-
             {contacts.length === 0 && (
                 <p>No hay contactos en esta agenda.</p>
             )}

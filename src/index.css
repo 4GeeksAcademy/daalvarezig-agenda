@@ -4,3 +4,16 @@ body {
     margin: 0;
     padding: 0;
 }
+html, body {
+   height: 100%;
+}
+
+#root {
+   display: flex;
+   flex-direction: column;
+   min-height: 100%;
+}
+
+footer {
+   margin-top: auto;
+}

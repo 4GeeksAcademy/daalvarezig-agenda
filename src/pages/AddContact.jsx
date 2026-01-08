@@ -16,6 +16,19 @@ export default function AddContact() {
         address: ""
     });
 
+    const checkAgenda = async () => {
+        const resp = await fetch(`${BASE_URL}/agendas/${SLUG}`);
+        return resp.status === 200;
+    };
+
+    const createAgenda = async () => {
+        const resp = await fetch(`${BASE_URL}/agendas/${SLUG}`, {
+            method: "POST"
+        });
+        return resp.status === 201;
+    };
+
+
     // Cargar contacto si estamos editando
     const loadContact = async () => {
         const resp = await fetch(`${BASE_URL}/agendas/${SLUG}/contacts/${id}`);
@@ -43,6 +56,10 @@ export default function AddContact() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        const exists = await checkAgenda();
+        if (!exists) await createAgenda();
+
 
         let resp;
 
@@ -54,7 +71,7 @@ export default function AddContact() {
                 body: JSON.stringify(form)
             });
 
-        // CREATE (POST)
+            // CREATE (POST)
         } else {
             resp = await fetch(`${BASE_URL}/agendas/${SLUG}/contacts`, {
                 method: "POST",
@@ -70,6 +87,7 @@ export default function AddContact() {
         }
     };
 
+    
     return (
         <div className="container mt-4">
             <h2>{id ? "Editar Contacto" : "Añadir Contacto"}</h2>

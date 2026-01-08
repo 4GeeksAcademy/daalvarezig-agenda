@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import ContactCard from "../components/ContactCard.jsx";
-import { Link } from "react-router-dom";
 
 const BASE_URL = "https://playground.4geeks.com/contact";
 const SLUG = "iTopy";
@@ -9,8 +8,27 @@ export default function Contact() {
 
     const [contacts, setContacts] = useState([]);
 
+    const checkAgenda = async () => {
+        const resp = await fetch(`${BASE_URL}/agendas/${SLUG}`);
+        return resp.status === 200;
+    };
+    
+    const createAgenda = async () => {
+        const resp = await fetch(`${BASE_URL}/agendas/${SLUG}`, {
+            method: "POST"
+        });
+
+    return resp.status === 201;
+    };
+
     const loadContacts = async () => {
         const resp = await fetch(`${BASE_URL}/agendas/${SLUG}/contacts`);
+
+        if (!resp.ok) {
+            setContacts([]);
+            return;
+        }
+
         const data = await resp.json();
         setContacts(data.contacts || []);
     };
@@ -30,8 +48,20 @@ export default function Contact() {
         loadContacts();
     };
 
+const init = async () => {
+        const exists = await checkAgenda();
+
+        if (!exists) {
+            console.log("Agenda no existe. Creando...");
+            await createAgenda();
+        }
+
+        await loadContacts();
+    };
+
+
     useEffect(() => {
-        loadContacts();
+        init();
     }, []);
 
     return (

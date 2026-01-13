@@ -17,7 +17,7 @@ export default function ContactCard({ contact, onDelete }) {
 
                 <div>
                     <button className="btn btn-warning btn-sm me-2"
-                        onClick={() => navigate(`/edit/${contact.id}`)}>
+                        onClick={() => navigate(`/add-contact/${contact.id}`)}>
                         Editar
                     </button>
                     <button className="btn btn-danger btn-sm"

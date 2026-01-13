@@ -16,6 +16,19 @@ export default function AddContact() {
         address: ""
     });
 
+    const checkAgenda = async () => {
+        const resp = await fetch(`${BASE_URL}/agendas/${SLUG}`);
+        return resp.status === 200;
+    };
+
+    const createAgenda = async () => {
+        const resp = await fetch(`${BASE_URL}/agendas/${SLUG}`, {
+            method: "POST"
+        });
+        return resp.status === 201;
+    };
+
+
     // Cargar contacto si estamos editando
     const loadContact = async () => {
         const resp = await fetch(`${BASE_URL}/agendas/${SLUG}/contacts/${id}`);
@@ -31,6 +44,7 @@ export default function AddContact() {
     };
 
     useEffect(() => {
+        console.log("ID recibido en AddContact:", id);
         if (id) loadContact();
     }, [id]);
 
@@ -52,7 +66,7 @@ export default function AddContact() {
 
         // UPDATE (PUT)
         if (id) {
-            resp = await fetch(`${BASE_URL}/agendas/${SLUG}/contacts/${id}`, {
+            resp = await fetch(`${BASE_URL}/contacts/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form)
@@ -63,7 +77,7 @@ export default function AddContact() {
             resp = await fetch(`${BASE_URL}/agendas/${SLUG}/contacts`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form)
+                body: JSON.stringify({...form, agenda_slug: SLUG})
             });
         }
 

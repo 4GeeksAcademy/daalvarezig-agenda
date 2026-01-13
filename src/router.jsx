@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/contacts" /> },
       { path: "contacts", element: <Contact /> },
       { path: "add", element: <AddContact /> },
-      { path: "edit/:id", element: <AddContact /> },
+      { path: "add-contact/:id", element: <AddContact /> },
     ]
   }
 ]);

@@ -16,19 +16,6 @@ export default function AddContact() {
         address: ""
     });
 
-    const checkAgenda = async () => {
-        const resp = await fetch(`${BASE_URL}/agendas/${SLUG}`);
-        return resp.status === 200;
-    };
-
-    const createAgenda = async () => {
-        const resp = await fetch(`${BASE_URL}/agendas/${SLUG}`, {
-            method: "POST"
-        });
-        return resp.status === 201;
-    };
-
-
     // Cargar contacto si estamos editando
     const loadContact = async () => {
         const resp = await fetch(`${BASE_URL}/agendas/${SLUG}/contacts/${id}`);

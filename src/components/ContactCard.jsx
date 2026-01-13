@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 export default function ContactCard({ contact, onDelete }) {
-    
-    
+
+
     const navigate = useNavigate();
 
     return (
@@ -17,13 +17,17 @@ export default function ContactCard({ contact, onDelete }) {
 
                 <div>
                     <button className="btn btn-warning btn-sm me-2"
-                        onClick={() => navigate(`/add-contact/${contact.id}`)}>
+                        onClick={() =>
+                            navigate(`/add-contact/${contact.id}`, {
+                                state: { contact }
+                            })
+                        }>
                         Editar
                     </button>
                     <button className="btn btn-danger btn-sm"
                         onClick={() => onDelete(contact.id)}
                     >
-                    Eliminar
+                        Eliminar
                     </button>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 const BASE_URL = "https://playground.4geeks.com/contact";
 const SLUG = "iTopy";
@@ -8,13 +8,34 @@ export default function AddContact() {
 
     const { id } = useParams();               // <- Si existe, estamos editando
     const navigate = useNavigate();
-
+    const location = useLocation();
+    const contactToEdit = location.state?.contact;
     const [form, setForm] = useState({
         name: "",
         phone: "",
         email: "",
         address: ""
     });
+
+    useEffect(() => {
+        if (id && contactToEdit) {
+            setForm({
+                name: contactToEdit.name,
+                phone: contactToEdit.phone,
+                email: contactToEdit.email,
+                address: contactToEdit.address
+            });
+        }
+    }, [id, contactToEdit]);
+
+    const contactId = contactToEdit?.id;
+
+    const handleChange = (e) => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        });
+    };
 
     const checkAgenda = async () => {
         const resp = await fetch(`${BASE_URL}/agendas/${SLUG}`);
@@ -26,34 +47,8 @@ export default function AddContact() {
             method: "POST"
         });
         return resp.status === 201;
-    };
+     };
 
-
-    // Cargar contacto si estamos editando
-    const loadContact = async () => {
-        const resp = await fetch(`${BASE_URL}/agendas/${SLUG}/contacts/${id}`);
-        if (resp.ok) {
-            const data = await resp.json();
-            setForm({
-                name: data.name,
-                phone: data.phone,
-                email: data.email,
-                address: data.address
-            });
-        }
-    };
-
-    useEffect(() => {
-        console.log("ID recibido en AddContact:", id);
-        if (id) loadContact();
-    }, [id]);
-
-    const handleChange = (e) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        });
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -65,11 +60,11 @@ export default function AddContact() {
         let resp;
 
         // UPDATE (PUT)
-        if (id) {
-            resp = await fetch(`${BASE_URL}/contacts/${id}`, {
+        if (id && contactId) {
+            resp = await fetch(`${BASE_URL}/agendas/${SLUG}/contacts/${contactId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form)
+                body: JSON.stringify({ ...form, agenda_slug: SLUG })
             });
 
             // CREATE (POST)
